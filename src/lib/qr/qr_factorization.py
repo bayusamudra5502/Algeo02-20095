@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.lib.function_base import copy
 
 def getNorm(x):
 # Menghitung panjang vektor

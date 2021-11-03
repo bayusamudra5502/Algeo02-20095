@@ -18,7 +18,7 @@ def colorToImage(M):
     PLT.imshow(M)
     PLT.show()
 
-def build_decom(A):
+def build_decom(A: np.ndarray):
     l = A@(A.T)
     r = (A.T)@A
 
