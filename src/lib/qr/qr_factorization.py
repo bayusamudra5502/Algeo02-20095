@@ -35,7 +35,7 @@ def calMatrix_H(v):
     H = I - (u @ u.T) / t
     return H
 
-def householder_transformation(m):
+def qr_factorization(m):
     A = np.copy(m)
     H = createMatrixIdentity(len(m))
     for i in range((len(m) - 1)):
