@@ -1,6 +1,22 @@
 import numpy as np
+from numpy.core.fromnumeric import compress
 import sklearn.preprocessing
+from PIL import Image
+from matplotlib import pyplot as PLT
 
+def image_to_rgba(filePath):
+    with Image.open(filePath) as im:
+        return np.array(im.convert("RGBA"))
+
+def inspectColor(Im):
+    return Im[:,:,0], Im[:,:,1], Im[:,:,2], Im[:,:,3] 
+
+def concatColor(R, G, B, A):
+    return np.array([R, G, B, A])
+
+def colorToImage(M):
+    PLT.imshow(M)
+    PLT.show()
 
 def build_decom(A):
     l = A@(A.T)
@@ -35,6 +51,20 @@ def build_decom(A):
     
     return l_singular, sigm, r_singular
 
-    
+def compress_to_k(A, k):
+    u, s, v = build_decom(A)
+    return (u[:,:k]@(s[:k, :k]@v[:k, :]))
+
+
+M = image_to_rgba("data/A.jpg")
+R, G, B, A = inspectColor(M)
+compress_to_k(R,50)
+compress_to_k(G,50)
+compress_to_k(B,50)
+compress_to_k(A,50)
+M = [R, G, B, A]
+colorToImage(M)
+
+
     
 
