@@ -3,7 +3,7 @@ from numpy.core.fromnumeric import compress
 import sklearn.preprocessing
 from PIL import Image
 from matplotlib import pyplot as PLT
-import pandas as pd
+# import pandas as pd
 
 def image_to_rgba(filePath):
     with Image.open(filePath) as im:

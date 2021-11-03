@@ -8,6 +8,7 @@ def calculate_eigenvalue(M: np.ndarray):
 
   dim = len(M)
   MH = make_upper_hessenberg(np.copy(M))
+  MH = MH.astype(np.float128)
 
   for _ in range(np.min([dim, 50])):
     I = np.identity(dim) * np.diag(MH)[-1]

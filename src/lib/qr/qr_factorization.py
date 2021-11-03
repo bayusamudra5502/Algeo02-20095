@@ -35,7 +35,7 @@ def calMatrix_H(v):
     return H
 
 def qr_factorization(m):
-    A = np.copy(m)
+    A = np.copy(m).astype(np.float128)
     H = createMatrixIdentity(len(m))
     for i in range((len(m) - 1)):
         a = getColumn(A,i)
