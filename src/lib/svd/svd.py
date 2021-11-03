@@ -3,23 +3,22 @@ from numpy.core.fromnumeric import compress
 import sklearn.preprocessing
 from PIL import Image
 from matplotlib import pyplot as PLT
-# import pandas as pd
+import pandas as pd
+import math
 
 def image_to_rgba(filePath):
     with Image.open(filePath) as im:
         return np.array(im.convert("RGBA"))
 
 def inspectColor(Im):
-    return Im[:,:,0], Im[:,:,1], Im[:,:,2], Im[:,:,3] 
+    return np.int32(np.array(Im[:,:,0])), np.int32(np.array(Im[:,:,1])), np.int32(np.array(Im[:,:,2])), np.int32(np.array(Im[:,:,3])) 
 
-def concatColor(R, G, B, A):
-    return np.array([R, G, B, A])
 
 def colorToImage(M):
     PLT.imshow(M)
     PLT.show()
 
-def build_decom(A: np.ndarray):
+def build_decom(A):
     l = A@(A.T)
     r = (A.T)@A
 
@@ -42,7 +41,10 @@ def build_decom(A: np.ndarray):
     # sorting & correlate right singular with left singular & dinomalisasi
     l_singular = l_eig[:,l_sort_pivot]
     i = 0
+    rank = 0
     for x in r_sigmum:
+        if(abs(x)>np.finfo(float).eps):
+            rank+=1
         if(abs(x)>np.finfo(float).eps and i<min(l_singular.shape[0],r_singular.shape[0])):
             l_singular[:,i] = (A@r_singular[i,:])*(1/x)
             i+=1
@@ -50,29 +52,26 @@ def build_decom(A: np.ndarray):
     sklearn.preprocessing.normalize(l_singular, norm="l2", axis=1, copy=False)
     l_singular = l_singular.T
     
-    return l_singular, sigm, r_singular
+    return l_singular, sigm, r_singular, rank
 
 def compress_to_k(A, k):
-    u, sigm, v = build_decom(A)
-    # rows, cols = A.shape
-    # sigm = np.pad(np.diag(sigm), ((0,rows),(0,cols)), mode='constant')[0:rows, 0:cols]
+    u, sigm, v, rank = build_decom(A)
+    k = math.floor(rank*k/100)
     return (u[:,:k]@(sigm[:k, :k]@v[:k, :]))
 
-
-# M = image_to_rgba("data/B.jpeg")
-# R, G, B, A = inspectColor(M)
-# r, c = R.shape
-# print(r,c)
-# R = compress_to_k(R,r//100)
-# G = compress_to_k(G,r//100)
-# B = compress_to_k(B,r//100)
-# A = compress_to_k(A,r//100)
+def compress_all(R, G, B, A, k):
+    R = compress_to_k(R, k)
+    G = compress_to_k(G, k)
+    B = compress_to_k(B, k)
+    A = compress_to_k(A, k)
+    return R, G, B, A
 
 
-# M = np.uint8((np.dstack((R, G, B, A))))
-# #print(M)
-# colorToImage(M)
-
+M = image_to_rgba("data/A.jpg")
+R, G, B, A = inspectColor(M)
+R, G, B, A = compress_all(R, G, B, A, 1)
+M = np.uint8((np.dstack((R, G, B, A))))
+colorToImage(M)
 
     
 
