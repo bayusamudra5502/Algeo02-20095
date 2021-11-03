@@ -3,6 +3,7 @@ from numpy.core.fromnumeric import compress
 import sklearn.preprocessing
 from PIL import Image
 from matplotlib import pyplot as PLT
+import pandas as pd
 
 def image_to_rgba(filePath):
     with Image.open(filePath) as im:
@@ -23,8 +24,8 @@ def build_decom(A):
     r = (A.T)@A
 
     #generate eigenvector with their corresponding eigenval
-    l_eigval, l_eig = np.linalg.eig(l)
-    r_eigval, r_eig = np.linalg.eig(r)
+    l_eigval, l_eig = np.linalg.eigh(l)
+    r_eigval, r_eig = np.linalg.eigh(r)
 
     #shaping matrix
     rows, cols = A.shape
@@ -52,18 +53,25 @@ def build_decom(A):
     return l_singular, sigm, r_singular
 
 def compress_to_k(A, k):
-    u, s, v = build_decom(A)
-    return (u[:,:k]@(s[:k, :k]@v[:k, :]))
+    u, sigm, v = build_decom(A)
+    # rows, cols = A.shape
+    # sigm = np.pad(np.diag(sigm), ((0,rows),(0,cols)), mode='constant')[0:rows, 0:cols]
+    return (u[:,:k]@(sigm[:k, :k]@v[:k, :]))
 
 
-M = image_to_rgba("data/A.jpg")
-R, G, B, A = inspectColor(M)
-compress_to_k(R,50)
-compress_to_k(G,50)
-compress_to_k(B,50)
-compress_to_k(A,50)
-M = [R, G, B, A]
-colorToImage(M)
+# M = image_to_rgba("data/B.jpeg")
+# R, G, B, A = inspectColor(M)
+# r, c = R.shape
+# print(r,c)
+# R = compress_to_k(R,r//100)
+# G = compress_to_k(G,r//100)
+# B = compress_to_k(B,r//100)
+# A = compress_to_k(A,r//100)
+
+
+# M = np.uint8((np.dstack((R, G, B, A))))
+# #print(M)
+# colorToImage(M)
 
 
     
