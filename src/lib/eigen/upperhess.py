@@ -3,7 +3,7 @@ import numpy as np
 
 def make_upper_hessenberg(A):
   """Membuat matriks persegi A menjadi matriks upper hessenberg"""
-  result = A
+  result = np.copy(A)
 
   for i in range(len(A)-2):
     u = -result[i+1:,i]

@@ -1,19 +1,18 @@
 import numpy as np
-from upperhess import make_upper_hessenberg
-from lib.qr.qr_factorization import qr_factorization
+from numpy.linalg import qr
+from scipy.linalg import hessenberg
+
 
 def calculate_eigenvalue(M: np.ndarray):
   """Menghitung nilai eigen. M haruslah matriks persegi."""
-  # Error masih gede dan lemot
 
-  dim = len(M)
-  MH = make_upper_hessenberg(np.copy(M))
-  MH = MH.astype(np.float128)
+  dim = M.shape[1]
+  MH = hessenberg(M)
 
-  for _ in range(np.min([dim, 50])):
-    I = np.identity(dim) * np.diag(MH)[-1]
-    q,r = qr_factorization(MH - I)
+  for _ in range(dim):
+    SHIFT = np.identity(dim) * np.diag(MH)[-1]
 
-    MH = r @ q + I
-  
+    q,r = qr(MH - SHIFT)
+    MH = (r @ q) + SHIFT
+
   return np.sort(np.diag(MH))[::-1]

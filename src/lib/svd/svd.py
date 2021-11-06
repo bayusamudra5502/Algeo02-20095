@@ -3,7 +3,7 @@ from numpy.core.fromnumeric import compress
 import sklearn.preprocessing
 from PIL import Image
 from matplotlib import pyplot as PLT
-import pandas as pd
+# import pandas as pd
 import math
 
 def image_to_rgba(filePath):
@@ -18,7 +18,7 @@ def colorToImage(M):
     PLT.imshow(M)
     PLT.show()
 
-def build_decom(A):
+def build_decom(A: np.ndarray):
     l = A@(A.T)
     r = (A.T)@A
 
