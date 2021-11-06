@@ -10,7 +10,7 @@ def calculate_eigen(M: np.ndarray):
   MH = hessenberg(M)
   V = np.identity(dim)
 
-  iteration = dim//2
+  iteration = np.min(dim//2, 100)
 
   for _ in range(iteration):
     SHIFT = np.identity(dim) * np.diag(MH)[-1]
