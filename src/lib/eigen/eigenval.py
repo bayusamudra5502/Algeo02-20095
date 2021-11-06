@@ -19,4 +19,4 @@ def calculate_eigen(M: np.ndarray):
     MH = (r @ q) + SHIFT
     V = V @ q
 
-  return np.sort(np.diag(MH))[::-1], V
+  return np.diag(MH), V
