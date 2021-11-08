@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+        <title>Image Compression</title>
+        <style>
+        section {
+            padding-top: 4rem;
+        }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">Tubes Bikin Pusing</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto active">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#compress">Compress</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#help">Help</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section id="home" style="margin-top: -5px;">
+            <h1 class="text-center text-dark shadow-lg" style="padding-bottom: 5px">IMAGE COMPRESSION</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <p class="fs-3" style="padding-top: 20px; text-align: justify;">Kompresi gambar merupakan suatu tipe kompresi data yang dilakukan pada gambar digital. Dengan kompresi gambar, suatu file gambar digital dapat dikurangi ukuran filenya dengan baik tanpa mempengaruhi kualitas gambar secara signifikan. Terdapat berbagai metode dan algoritma yang digunakan untuk kompresi gambar pada zaman modern ini</p>
+                        <p class="fs-3" style="text-align: justify;">
+                            Salah satu algoritma yang dapat digunakan untuk kompresi gambar adalah algoritma SVD 
+                            (Singular Value Decomposition). Algoritma SVD didasarkan pada teorema dalam aljabar 
+                            linier yang menyatakan bahwa sebuah matriks dua dimensi dapat dipecah menjadi hasil 
+                            perkalian dari 3 sub-matriks yaitu matriks ortogonal U, matriks diagonal S, dan transpose dari matriks ortogonal V. 
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="compress">
+            <div class="container">
+                <div class="row text-center">
+                    <form method="post" action="" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="FormControlInput1" class="form-label fs-3">Input Your Image</label>
+                            <center>
+                                <input type="file" class="form-control" id="FormControlInput1" accept="image/*" style="width: 400px;">
+                            </center>
+                        </div>
+                        <label for="rate" class="form-label fs-3">Image Compression Rate: </label>
+                        <center>
+                            <div class="input-group mb-3" style="width: 100px;" >
+                                <input type="number" id="rate" min="1" max="100" class="form-control" style=" border-radius: 5px;">
+                                <label for="rate" class="form-label fs-4"> %</label>
+                            </div>
+                        </center>
+                        <button type="submit" class="btn btn-primary" style="margin-left:-10px;">compress</button>
+                    </form>
+                </div>
+                <div class="row" style="border: solid; padding: 0px 70px; padding-bottom: 40px; margin-top: 20px;">
+                    <div class="row">
+                        <div class="col-xl" style="margin: auto;">
+                            <p style="margin-top: 40px;">before</p>
+                            <div style="min-height: 400px; max-width: 600px; border: solid;">
+                            </div>
+                        </div>
+                        <div class="col-xl" style="margin: auto;">
+                            <p style="margin-top: 40px;">after</p>
+                            <div style="min-height: 400px; max-width: 600px; border: solid;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-xl">
+                            <p class="info-compression"></p>
+                        </div>
+                        <div class="col-xl">
+                            <div class="download">
+                                <a href="" download="">
+                                    <input type="button" value="Download">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="help">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <p class="fs-3">How to use image compressor</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div style="height: 100px;"></div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </body>
+</html>
