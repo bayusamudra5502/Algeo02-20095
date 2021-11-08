@@ -2,7 +2,7 @@ from math import sqrt
 from numpy.random.mtrand import randint
 import scipy as sp
 import numpy as np
-from scipy.linalg.decomp import hessenberg
+from scipy.linalg import hessenberg
 import time
 import math
 
@@ -12,12 +12,12 @@ def Set_Zeros(A):
     Infinity_Norm = 0
     Infinity_Norm = np.abs(A[0][0]) if (np.abs(A[0][0])>Infinity_Norm) else Infinity_Norm
     for i in range(n-1):
-        if(np.abs(A[i][i+1])<(np.abs(A[i][i])+np.abs(A[i+1][i+1]))*1e-12):
+        if(np.abs(A[i][i+1])<(np.abs(A[i][i])+np.abs(A[i+1][i+1]))*1e-20):
             A[i][i+1] = 0
         Infinity_Norm = np.abs(A[i][i+1]) if (np.abs(A[i][i+1])>Infinity_Norm) else Infinity_Norm
         Infinity_Norm = np.abs(A[i+1][i+1]) if (np.abs(A[i+1][i+1])>Infinity_Norm) else Infinity_Norm
     for i in range(n):
-        if(np.abs(A[i][i])< Infinity_Norm*1e-12):
+        if(np.abs(A[i][i])< Infinity_Norm*1e-20):
             A[i][i] = 0
     return A
 
@@ -124,9 +124,15 @@ def Wilkinson_Step(A):
             A[min + k][min + k] = s * a + c * b
     return A
 
-A = np.random.randint(100,255,size=(1000, 1000))
+A = np.random.randint(100,255,size=(4, 4))
 A = (np.float64(A)@((np.float64(A)).T))
+o1, c112 = np.linalg.eig(A)
+print(o1)
 A = hessenberg(A)
+oo, qq = np.linalg.eig(A)
+print(oo)
+xxx =A
+# print(Q)
 m, n = A.shape
 q = 0
 p = n
@@ -152,11 +158,24 @@ while True:
     # print(A)
     # print(p, q)
 end = time.time()
-print(end-start)
+# print(end-start)
+print(np.diag(A))
 start = time.time()
-o, q = np.linalg.eig(A)
+
+
+# s, v, d = np.linalg.svd(xxx)
+# print(v)
+o, q = np.linalg.eig(xxx)
+oo, qq = np.linalg.eig(A)
 end = time.time()
-print(np.diag(A), o)
-print(end-start)
+print(o)
+# print(oo)
+# print(end-start)
+# A = (A.T[np.argsort(np.diag(A))]).T
+# print(A)
+print(oo)
+# print(s@np.diag(np.diag(A))@(d)-xxx)
+# print(xxx)
+# print(Q@A@(Q.T))
 
 

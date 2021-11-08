@@ -374,19 +374,19 @@ void SVD_Decomposition::Decomposition()
 	First_Step();
     for(int i=0; i<10; i++){
             for(int j=0; j<10; j++){
-                cout << this->A[i][j] << " ";
+                cout << this->U[i][j] << " ";
             }
             cout << "\n";
         }
 	while (1)
 	{
 		Set_Zeros();
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                cout << this->A[i][j] << " ";
-            }
-            cout << "\n";
-        }
+        // for(int i=0; i<10; i++){
+        //     for(int j=0; j<10; j++){
+        //         cout << this->V[i][j] << " ";
+        //     }
+        //     cout << "\n";
+        // }
 		if (Searching_For_Diagonal_Matrix()) break;
 		int min = p, max = A[0].size() - q - 1;//B22的边界行
 		bool flag = false;
@@ -465,14 +465,15 @@ int main() {
             M[i][j] = sin(10*j+i);
         }
     }
-    SVD_Decomposition S(M);
+    SVD_Decomposition* S = new SVD_Decomposition(M);
     for(int i=0; i<10; i++){
         for(int j=0; j<10; j++){
             cout << M[i][j] << " ";
         }
         cout << "\n";
     }
-    S.Decomposition();
+	S -> Decomposition();
+    
 
 
 
