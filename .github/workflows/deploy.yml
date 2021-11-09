@@ -9,16 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Pindah Directory
-        run: cd src/frontend
       - name: Menginstall Depedencies 📦
         run: |
+          cd src/frontend
           yarn install --frozen-lockfile
       - name: Build Frontend 🔨
         run: |
+          cd src/frontend
           yarn build
       - name: Deploy Website
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./src/frontend/build
