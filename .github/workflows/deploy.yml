@@ -1,0 +1,24 @@
+name: Deploy Frontend Tubes
+
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pindah Directory
+        run: cd src/frontend
+      - name: Menginstall Depedencies 📦
+        run: |
+          yarn install --frozen-lockfile
+      - name: Build Frontend 🔨
+        run: |
+          yarn build
+      - name: Deploy Website
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
