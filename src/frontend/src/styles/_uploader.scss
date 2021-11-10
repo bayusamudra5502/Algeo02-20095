@@ -1,0 +1,38 @@
+.uploader-container {
+  border: 3px dashed #cccccc;
+  border-radius: 20px;
+  width: 400px;
+  margin: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  flex-direction: column;
+  color: rgb(119, 119, 119);
+  transition: 200ms ease-in-out;
+
+  .icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+
+  &:hover {
+    color: #277da1;
+    border-color: #277da1;
+    background-color: rgba(39, 125, 161, 3%);
+  }
+
+  &.drag-active {
+    color: #43aa8b;
+    border-color: #43a889;
+    background-color: rgba(67, 168, 137, 0.03);
+  }
+
+  &.drag-reject {
+    color: #e07a5f;
+    border-color: #e07a5f;
+    background-color: rgba(224, 122, 95, 0.03);
+  }
+}
