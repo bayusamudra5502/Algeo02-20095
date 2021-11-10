@@ -30,7 +30,7 @@ export default function Title() {
           <Progress value={0.3} animated={true}></Progress>
         </div>
         <div className="bottom">
-          <h2 className="sub-judul">Tentang kami</h2>
+          <h2 className="sub-judul">Tentang Program ini</h2>
           <p>Program ini dibuat oleh kelompok X</p>
           <p>
             Lihat informasi lengkap <button class="button-link">disini</button>.
