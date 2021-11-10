@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ConnectionProvider } from "./components/context/ConnectionContext";
+import { ProcessProvider } from "./components/context/ProcessContext";
 
 import "bootstrap/scss/bootstrap.scss";
 import "./styles/index.scss";
@@ -10,7 +11,9 @@ import "./styles/index.scss";
 ReactDOM.render(
   <React.StrictMode>
     <ConnectionProvider>
-      <App />
+      <ProcessProvider>
+        <App />
+      </ProcessProvider>
     </ConnectionProvider>
   </React.StrictMode>,
   document.getElementById("root")
