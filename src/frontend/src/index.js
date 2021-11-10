@@ -1,12 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ConnectionProvider } from "./components/context/ConnectionContext";
+
+import "bootstrap/scss/bootstrap.scss";
+import "./styles/index.scss";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ConnectionProvider>
+      <App />
+    </ConnectionProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

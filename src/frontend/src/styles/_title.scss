@@ -1,0 +1,71 @@
+.title {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    margin-bottom: 10px;
+  }
+
+  .picture {
+    max-width: 250px;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.status div {
+  display: flex;
+  align-items: center;
+}
+
+.statusbar {
+  transition: all 100ms ease-in-out;
+  height: 1em;
+  width: 1em;
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 50%;
+}
+
+.connected {
+  background-color: #81b29a;
+}
+
+.disconnected {
+  background-color: #e07a5f;
+}
+
+.connect-plug {
+  border: 0;
+  background: transparent;
+  margin: 0 5px;
+  cursor: pointer;
+
+  img {
+    height: 20px;
+  }
+}
+
+.button-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #577590;
+
+  &:hover,
+  &:active {
+    color: #465b6e;
+    text-decoration: underline;
+  }
+}
+
+.bottom p {
+  margin: 0;
+}
+
+.progress-bar.bg-proses-ok {
+  background-color: #4d908e !important;
+}
