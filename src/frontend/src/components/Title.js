@@ -8,11 +8,15 @@ import ConnectComponent from "./Connect";
 
 export default function Title() {
   const [showAbout, setAbout] = useState(false);
-  const { isConnected } = useContext(ConnectionContext);
+  const { isConnected, setConnect } = useContext(ConnectionContext);
   const { compressState } = useContext(ProcessContext);
 
   const handleClose = () => setAbout(false);
   const handleOpen = () => setAbout(true);
+
+  const onConnected = () => {
+    setConnect(true);
+  };
 
   return (
     <>
@@ -25,15 +29,15 @@ export default function Title() {
           <p>Yuk buat ukuran file gambar lebih kecil</p>
         </div>
         <div className="status">
-          <h2 className="sub-judul">Status Koneksi</h2>
+          <h2 className="sub-judul">Koneksi</h2>
           <div>
             <span
               className={
                 "statusbar " + (isConnected ? "connected" : "disconnected")
               }
             ></span>
-            {isConnected ? "Connected" : "Disconnected"}
-            {!isConnected ? <ConnectComponent></ConnectComponent> : ""}
+            {isConnected ? "Tersambung" : "Tidak Tersambung"}
+            {!isConnected ? <ConnectComponent onConnected={onConnected} /> : ""}
           </div>
         </div>
         {compressState.isCompressing ? (
@@ -49,7 +53,7 @@ export default function Title() {
           <p>Program ini dibuat oleh kelompok X</p>
           <p>
             Lihat informasi lengkap{" "}
-            <button class="button-link" onClick={handleOpen}>
+            <button className="button-link" onClick={handleOpen}>
               disini
             </button>
             .
