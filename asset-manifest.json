@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/Algeo02-20095/static/css/main.2c212e2c.chunk.css",
-    "main.js": "/Algeo02-20095/static/js/main.ce782c71.chunk.js",
-    "main.js.map": "/Algeo02-20095/static/js/main.ce782c71.chunk.js.map",
+    "main.css": "/Algeo02-20095/static/css/main.9f69c184.chunk.css",
+    "main.js": "/Algeo02-20095/static/js/main.774cca1c.chunk.js",
+    "main.js.map": "/Algeo02-20095/static/js/main.774cca1c.chunk.js.map",
     "runtime-main.js": "/Algeo02-20095/static/js/runtime-main.84821675.js",
     "runtime-main.js.map": "/Algeo02-20095/static/js/runtime-main.84821675.js.map",
     "static/css/2.db309fd4.chunk.css": "/Algeo02-20095/static/css/2.db309fd4.chunk.css",
@@ -12,7 +12,7 @@
     "static/js/3.c5f2ed24.chunk.js.map": "/Algeo02-20095/static/js/3.c5f2ed24.chunk.js.map",
     "index.html": "/Algeo02-20095/index.html",
     "static/css/2.db309fd4.chunk.css.map": "/Algeo02-20095/static/css/2.db309fd4.chunk.css.map",
-    "static/css/main.2c212e2c.chunk.css.map": "/Algeo02-20095/static/css/main.2c212e2c.chunk.css.map",
+    "static/css/main.9f69c184.chunk.css.map": "/Algeo02-20095/static/css/main.9f69c184.chunk.css.map",
     "static/js/2.58337ae9.chunk.js.LICENSE.txt": "/Algeo02-20095/static/js/2.58337ae9.chunk.js.LICENSE.txt",
     "static/media/pictures.f69c51c0.png": "/Algeo02-20095/static/media/pictures.f69c51c0.png",
     "static/media/plug.ca5edc1d.png": "/Algeo02-20095/static/media/plug.ca5edc1d.png"
@@ -21,7 +21,7 @@
     "static/js/runtime-main.84821675.js",
     "static/css/2.db309fd4.chunk.css",
     "static/js/2.58337ae9.chunk.js",
-    "static/css/main.2c212e2c.chunk.css",
-    "static/js/main.ce782c71.chunk.js"
+    "static/css/main.9f69c184.chunk.css",
+    "static/js/main.774cca1c.chunk.js"
   ]
 }
