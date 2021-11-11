@@ -5,7 +5,18 @@ from api.state import State as st
 from lib.processing.imgprocess import build_decom_state
 from threading import Thread
 
-sio = socketio.AsyncServer(async_mode='asgi')
+origin = [
+  "http://localhost:3000",
+  "http://localhost:5502",
+  "http://localhost",
+  "https://compress.bayusamudra.my.id"
+]
+
+sio = socketio.AsyncServer(
+          async_mode='asgi',
+          cors_allowed_origins=origin
+        )
+        
 app = socketio.ASGIApp(sio)
 state: st = None
 

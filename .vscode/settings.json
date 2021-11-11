@@ -1,3 +1,4 @@
 {
-  "python.testing.pytestArgs": ["src"]
+  "python.testing.pytestArgs": ["src"],
+  "appService.deploySubpath": "src/backend"
 }

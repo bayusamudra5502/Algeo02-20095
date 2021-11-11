@@ -17,12 +17,18 @@ state:State = None
 
 origin = [
   "http://localhost:3000",
+  "http://localhost:5502",
   "http://localhost",
-  "https://compress.bayusamudra.my.id",
-  "https://bayusamudra.my.id",
+  "https://compress.bayusamudra.my.id"
 ]
 
-app.add_middleware()
+app.add_middleware(
+  CORSMiddleware, 
+  allow_origins=origin,
+  allow_methods=["GET","POST"],
+  allow_headers=["*"],
+  allow_credentials=True
+)
 
 @app.get("/")
 async def root_path():
