@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/Algeo02-20095/static/css/main.c21acd9b.chunk.css",
-    "main.js": "/Algeo02-20095/static/js/main.106dd207.chunk.js",
-    "main.js.map": "/Algeo02-20095/static/js/main.106dd207.chunk.js.map",
-    "runtime-main.js": "/Algeo02-20095/static/js/runtime-main.de9a782d.js",
-    "runtime-main.js.map": "/Algeo02-20095/static/js/runtime-main.de9a782d.js.map",
+    "main.css": "/Algeo02-20095/static/css/main.721bfeba.chunk.css",
+    "main.js": "/Algeo02-20095/static/js/main.9fa824b2.chunk.js",
+    "main.js.map": "/Algeo02-20095/static/js/main.9fa824b2.chunk.js.map",
+    "runtime-main.js": "/Algeo02-20095/static/js/runtime-main.dec5b92a.js",
+    "runtime-main.js.map": "/Algeo02-20095/static/js/runtime-main.dec5b92a.js.map",
     "static/css/2.db309fd4.chunk.css": "/Algeo02-20095/static/css/2.db309fd4.chunk.css",
-    "static/js/2.038be79a.chunk.js": "/Algeo02-20095/static/js/2.038be79a.chunk.js",
-    "static/js/2.038be79a.chunk.js.map": "/Algeo02-20095/static/js/2.038be79a.chunk.js.map",
-    "static/js/3.c11c6b49.chunk.js": "/Algeo02-20095/static/js/3.c11c6b49.chunk.js",
-    "static/js/3.c11c6b49.chunk.js.map": "/Algeo02-20095/static/js/3.c11c6b49.chunk.js.map",
+    "static/js/2.488166fb.chunk.js": "/Algeo02-20095/static/js/2.488166fb.chunk.js",
+    "static/js/2.488166fb.chunk.js.map": "/Algeo02-20095/static/js/2.488166fb.chunk.js.map",
+    "static/js/3.c69b7dc9.chunk.js": "/Algeo02-20095/static/js/3.c69b7dc9.chunk.js",
+    "static/js/3.c69b7dc9.chunk.js.map": "/Algeo02-20095/static/js/3.c69b7dc9.chunk.js.map",
     "index.html": "/Algeo02-20095/index.html",
     "static/css/2.db309fd4.chunk.css.map": "/Algeo02-20095/static/css/2.db309fd4.chunk.css.map",
-    "static/css/main.c21acd9b.chunk.css.map": "/Algeo02-20095/static/css/main.c21acd9b.chunk.css.map",
-    "static/js/2.038be79a.chunk.js.LICENSE.txt": "/Algeo02-20095/static/js/2.038be79a.chunk.js.LICENSE.txt",
+    "static/css/main.721bfeba.chunk.css.map": "/Algeo02-20095/static/css/main.721bfeba.chunk.css.map",
+    "static/js/2.488166fb.chunk.js.LICENSE.txt": "/Algeo02-20095/static/js/2.488166fb.chunk.js.LICENSE.txt",
     "static/media/pictures.f69c51c0.png": "/Algeo02-20095/static/media/pictures.f69c51c0.png",
     "static/media/plug.ca5edc1d.png": "/Algeo02-20095/static/media/plug.ca5edc1d.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.de9a782d.js",
+    "static/js/runtime-main.dec5b92a.js",
     "static/css/2.db309fd4.chunk.css",
-    "static/js/2.038be79a.chunk.js",
-    "static/css/main.c21acd9b.chunk.css",
-    "static/js/main.106dd207.chunk.js"
+    "static/js/2.488166fb.chunk.js",
+    "static/css/main.721bfeba.chunk.css",
+    "static/js/main.9fa824b2.chunk.js"
   ]
 }
