@@ -53,7 +53,7 @@ export default function ConnectComponent({ onConnected }) {
                   }}
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-4">
                 <Form.Label>Port</Form.Label>
                 <Form.Control
                   type="number"
@@ -66,7 +66,7 @@ export default function ConnectComponent({ onConnected }) {
                 />
               </Form.Group>
               <Form.Group>
-                <button className="btn btn-primary">Submit</button>
+                <button className="btn btn-success">Connect</button>
               </Form.Group>
             </Form>
           </div>

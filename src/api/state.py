@@ -16,6 +16,7 @@ class State:
     self.__data["subscribeSID"] = None
     self.__data["ws"] = None
     self.__data["imageMatrix"] = None
+    self.__data["imageReady"] = False
   
   # Socket Handler
   async def sendUpdateState(self, processId, comment):
@@ -24,3 +25,7 @@ class State:
   
   def isSubscribed(self):
     return self.__data["subscribeSID"] != None
+
+  # Util
+  def counter_calc(self, number, start, end, cnt):
+    return start+ number/cnt * (end-start)

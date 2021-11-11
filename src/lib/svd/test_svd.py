@@ -1,9 +1,11 @@
-import svd
+import lib.svd.svd as svd 
 import numpy as np
+import pytest
 
-def test_svd_1():
+@pytest.mark.asyncio
+async def test_svd_1():
   A = np.random.randint(0,255,size=(50,50))
-  u,s,vt = svd.build_decom(A)
+  u,s,vt,_ = await svd.build_decom(A)
 
   # Tes u dan vt
   uut = u @ np.transpose(u)
@@ -13,10 +15,11 @@ def test_svd_1():
 
   assert np.allclose(u @ s @ vt, A)
 
-def test_svd_2():
+@pytest.mark.asyncio
+async def test_svd_2():
   A = np.random.randint(0,255,size=(30,50))
   u, s, v = np.linalg.svd(A)
-  ua,sa,va = svd.build_decom(A)
+  ua,sa,va,_ = await svd.build_decom(A)
   sz = np.zeros((30,50))
 
   for i in range(len(s)):
@@ -31,10 +34,10 @@ def test_svd_2():
   assert np.allclose(u @ sz @ v, A)
   assert np.allclose(ua @ sa @ va, A)
 
-
-def test_svd_3():
+@pytest.mark.asyncio
+async def test_svd_3():
   A = np.random.randint(0,255,size=(50,30))
-  u,s,vt = svd.build_decom(A)
+  u,s,vt,_ = await svd.build_decom(A)
 
   # Tes u dan vt
   uut = u @ np.transpose(u)

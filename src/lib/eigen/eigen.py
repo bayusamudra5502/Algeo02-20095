@@ -1,19 +1,28 @@
-from math import isclose, sqrt
-from numpy.random.mtrand import randint
-import scipy as sp
 import numpy as np
+from api.state import State
 from scipy.linalg.decomp import hessenberg
-import time
-import math
 
-def EigenV(mat, precision = 30):
-    m, n = mat.shape
+async def EigenV(mat:np.ndarray, precision = 30, *, sendProgress=False,state:State=None, startCounter=0, endCounter=1, channel="WARNA"):
+    _, n = mat.shape
+    totalProses = 1 + n
+
+    if sendProgress:
+        await state.sendUpdateState(startCounter, f"[{channel}] Memulai perhitungan matriks hessenberg")
+
     H, Q = hessenberg(mat, calc_q=True)
+
+    if sendProgress:
+        await state.sendUpdateState(startCounter + (1/totalProses*(endCounter-startCounter)), f"[{channel}] Mempersiapkan pehitungan Eigenvalue")
+
     sub = np.float64(np.copy(np.diag(H,-1)))
     diag = np.float64(np.copy(np.diag(H)))
     sub = np.insert(sub, n-1, 0)
     limit = precision
+
     for i in range(n):
+        if sendProgress and i % 50 == 0:
+            await state.sendUpdateState(startCounter + (1+i/totalProses*(endCounter-startCounter)), f"[{channel}] Menghitung Eigenvalue ({i}/{n})")
+
         niter = 0
         while niter<limit:
             j = i
@@ -60,29 +69,3 @@ def EigenV(mat, precision = 30):
                 sub[j] = 0
                 diag[i] = diag[i]-p
     return diag, Q
-
-
-# TESTING MODUL
-# A = np.random.randint(0,255,size=(100, 100))
-# A = (np.float64(A)@((np.float64(A)).T))
-# rows = A.shape[0]
-# start = time.time()
-# pp, qq = EigenV(A)
-# end = time.time()
-# print("waktu: ", end-start)
-# sama = True
-# for i in range(rows):
-#     if(not(np.allclose(np.abs(A@qq[:,i]-pp[i]*qq[:,i]).astype(int),np.zeros(rows)))):
-#         print(A@qq[:,i]-pp[i]*qq[:,i])
-#         sama = False
-#         print("Yahh, ada yang beda,, ^ itu ketidaktelitiannya ya")
-#         break
-# if(sama):
-#     print("Wow, sama semua!")
-
-# TESTING NORM
-# A = np.random.randint(0,255,size=(100, 100))
-# A = (np.float64(A)@((np.float64(A)).T))
-# pp, qq = EigenV(A)
-# for i in range(A.shape[0]):
-#     print(np.linalg.norm(qq[:,i]))

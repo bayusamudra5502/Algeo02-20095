@@ -13,8 +13,9 @@ async def connect(sid, _):
 
 @sio.event
 async def subscribe(sid, _):
-  if state.getState("subscribeSID") != None:
+  if state.getState("subscribeSID") == None:
     state.setState("subscribeSID", sid)
+    state.setState("isReady", False)
     await sio.emit("response", data={"success": True}, to=state.getState("subscribeSID"))
   else:
     await sio.emit("response", data={"success": False}, to=sid)
@@ -25,12 +26,17 @@ async def buildMatrix(sid, _):
 
 @sio.event
 async def unsubscribe(sid, _):
-  state.setState("subscribeSID", None)
-  await sio.emit("response", data={"success": True}, to=sid)
+  if state.getState("subscribeSID") == sid:
+    state.reset()
+    await sio.emit("response", data={"success": True}, to=sid)
+  else:
+    await sio.emit("response", data={"success": False}, to=sid)
 
 @sio.event
 async def disconnect(sid):
   print(f"INFO:\tUser dengan {sid} berhasil disconnect")
+  if state.getState("subscribeSID") == sid:
+    state.reset()
 
 def run_ws(State:st):
   global state
