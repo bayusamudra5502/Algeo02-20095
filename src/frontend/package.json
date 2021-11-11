@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://bayusamudra.my.id/Algeo02-20095/",
+  "homepage": "https://compress.bayusamudra.my.id/",
   "dependencies": {
     "@popperjs/core": "^2.10.2",
     "@testing-library/jest-dom": "^5.11.4",

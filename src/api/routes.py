@@ -4,14 +4,25 @@ from lib.converter.convert import *
 from fastapi.datastructures import UploadFile
 from fastapi.params import File, Form
 from fastapi.responses import StreamingResponse
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from api.state import *
 from api.state import State
 from lib.processing.imgprocess import compress_image_by_cache
+from fastapi.middleware.cors import CORSMiddleware
+
+import uvicorn
 
 app = FastAPI()
 state:State = None
+
+origin = [
+  "http://localhost:3000",
+  "http://localhost",
+  "https://compress.bayusamudra.my.id",
+  "https://bayusamudra.my.id",
+]
+
+app.add_middleware()
 
 @app.get("/")
 async def root_path():
