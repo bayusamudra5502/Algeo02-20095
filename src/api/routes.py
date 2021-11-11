@@ -1,4 +1,5 @@
-from starlette.responses import FileResponse, Response
+from typing import Optional
+from starlette.responses import Response
 from lib.converter.convert import *
 from fastapi.datastructures import UploadFile
 from fastapi.params import File, Form
@@ -7,6 +8,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from api.state import *
 from api.state import State
+from lib.processing.imgprocess import compress_image_by_cache
 
 app = FastAPI()
 state:State = None
@@ -33,6 +35,7 @@ async def upload(token:str = Form(...), file: UploadFile = File(...)):
 
     
     state.setState("imageReady", False)
+    state.setState("imageLoaded", True)
     state.setState("imageMatrix", matrix)
     state.setState("format", file.content_type.lower())
 
@@ -40,33 +43,36 @@ async def upload(token:str = Form(...), file: UploadFile = File(...)):
 
     state.setState("filename", ".".join(filename[:-1]))
     state.setState("extension",filename[-1])
-
-    state.setState("imageReady", True)
     return {"success": True}
   else:
     raise HTTPException(status_code=403, detail="Anda tidak memiliki akses untuk upload")
 
 @app.get("/compress/{level}/download/")
-async def downloadCompressedImage(level: int):
+async def downloadCompressedImage(level: int, alpha: Optional[bool] = False):
   if not state.getState("imageReady"):
     raise HTTPException(status_code=404, detail="Gambar belum diproses")
   else:
-    res = state.getState("imageMatrix")
+    res, _ = await compress_image_by_cache(state, level, alpha=alpha)
     f = convertArrayToIO(res, state.getState("format"))
 
     filename = state.getState("filename") + "." + str(level) + "." + state.getState("extension")
 
-    # return FileResponse("./.tmp/cache", media_type="application/octet-stream", filename=f"")
     return Response(f.read(), 
       headers={"Content-Disposition": f'attachment; filename="{filename}"'}, 
       media_type="application/octet-stream")
 
+@app.get("/compress/{level}/level/")
+async def getLevel(level: int, alpha: Optional[bool] = False):
+  _, level = await compress_image_by_cache(state, round(level, 3), alpha=alpha)
+
+  return {"success": True, "compress": level}
+
 @app.get("/compress/{level}")
-async def compressImage(level: int):
+async def compressImage(level: int, alpha: Optional[bool] = False):
   if not state.getState("imageReady"):
     raise HTTPException(status_code=404, detail="Gambar belum diproses")
   else:
-    res = state.getState("imageMatrix")
+    res,_ = await compress_image_by_cache(state, level, alpha=alpha)
     f = convertArrayToIO(res, state.getState("format"))
 
     return StreamingResponse(f, media_type=state.getState("format"))

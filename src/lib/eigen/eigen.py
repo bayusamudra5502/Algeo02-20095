@@ -1,27 +1,25 @@
 import numpy as np
-from api.state import State
 from scipy.linalg.decomp import hessenberg
 
-async def EigenV(mat:np.ndarray, precision = 30, *, sendProgress=False,state:State=None, startCounter=0, endCounter=1, channel="WARNA"):
+def EigenV(mat, precision = 30, *, updater=None):
     _, n = mat.shape
-    totalProses = 1 + n
+    MAX_SECTION = n + 3
 
-    if sendProgress:
-        await state.sendUpdateState(startCounter, f"[{channel}] Memulai perhitungan matriks hessenberg")
+    if updater != None:
+        updater(1/MAX_SECTION)
 
     H, Q = hessenberg(mat, calc_q=True)
-
-    if sendProgress:
-        await state.sendUpdateState(startCounter + (1/totalProses*(endCounter-startCounter)), f"[{channel}] Mempersiapkan pehitungan Eigenvalue")
-
     sub = np.float64(np.copy(np.diag(H,-1)))
     diag = np.float64(np.copy(np.diag(H)))
     sub = np.insert(sub, n-1, 0)
     limit = precision
 
+    if updater != None:
+        updater(2/MAX_SECTION)
+
     for i in range(n):
-        if sendProgress and i % 50 == 0:
-            await state.sendUpdateState(startCounter + (1+i/totalProses*(endCounter-startCounter)), f"[{channel}] Menghitung Eigenvalue ({i}/{n})")
+        if updater != None and i % 10 == 0:
+            updater((2+i)/MAX_SECTION)
 
         niter = 0
         while niter<limit:

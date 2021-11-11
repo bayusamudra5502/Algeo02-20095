@@ -1,6 +1,9 @@
+from fastapi import params
 import socketio
 import uvicorn
 from api.state import State as st
+from lib.processing.imgprocess import build_decom_state
+from threading import Thread
 
 sio = socketio.AsyncServer(async_mode='asgi')
 app = socketio.ASGIApp(sio)
@@ -22,7 +25,13 @@ async def subscribe(sid, _):
 
 @sio.on("build-matrix")
 async def buildMatrix(sid, _):
-  pass
+  if state.getState("subscribeSID") == sid and state.getState("imageLoaded"):
+    B = Thread(target=build_decom_state, args=(state,), daemon=True)
+    B.start()
+
+    await sio.emit("response", data={"success": True}, to=sid)
+  else:
+    await sio.emit("response", data={"success": False}, to=sid)
 
 @sio.event
 async def unsubscribe(sid, _):

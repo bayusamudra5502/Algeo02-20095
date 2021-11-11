@@ -4,7 +4,6 @@ from api.routes import run_server
 from api.socket import run_ws
 from api.state import State
 
-
 def main():
   print("""\u001b[32m
  _____                             _____                                                    

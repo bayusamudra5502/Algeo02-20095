@@ -4,46 +4,45 @@ from api.state import State
 
 from lib.eigen.eigen import EigenV
 
-def counter_calc(number, start, end, cnt):
-    return start+ number/cnt * (end-start)
+def gprocessd(value, channel):
+    return {
+        "func": 1,
+        "channel": channel,
+        "value": value/37
+    }
 
-async def build_decom(A: np.ndarray,*, sendProgress=False, state:State=None, startCounter=0, endCounter=37, channel="WARNA"):
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(1, startCounter, endCounter,38),
-            F"[{channel}] Memulai Perhitungan Perkalian Matriks A @ A.T")
+def updater(state:State, channel, start, end, sendUpdate):
+    if sendUpdate:
+        def update(value):
+            state.sendUpdateState(
+                gprocessd(start + value*(end-start), channel), 
+                "Menghitung Eigenvalue")
 
+        return update
+    else:
+        return None
+
+def build_decom(A: np.ndarray, *, state:State=None, channel="W", sendFeedback=False):
     l = A@(A.T)
-
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(2, startCounter, endCounter,38),
-        f"[{channel}] Memulai Perhitungan Perkalian Matriks A.T @ A")
-
     r = (A.T)@A
+    if sendFeedback:
+        state.sendUpdateState(gprocessd(1,channel), "Proses Perkalian Matriks Selesai")
     
     #generate eigenvector with their corresponding eigenval
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(3, startCounter, endCounter,38),
-            f"[{channel}] Memulai Perhitungan Eigenvector L")
+    if sendFeedback:
+        state.sendUpdateState(gprocessd(2,channel), "Menghitung Nilai Eigen")
 
-    l_eigval, l_eig = await EigenV(l,sendProgress=sendProgress,state=state, 
-                startCounter=counter_calc(3, startCounter, endCounter,38), 
-                endCounter=counter_calc(13, startCounter, endCounter,38), 
-                channel=channel)
+    l_eigval, l_eig = EigenV(l, updater=updater(state, channel, 2, 12, sendFeedback))
 
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(14, startCounter, endCounter,38),
-            f"[{channel}] Memulai Perhitungan Eigenvector R")
-
-    r_eigval, r_eig = await EigenV(r,sendProgress=sendProgress,
-        state=state, startCounter=counter_calc(14, startCounter, endCounter,38), 
-        endCounter=counter_calc(24, startCounter, endCounter,37),
-         channel=channel)
-
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(25, startCounter, endCounter,38),
-            f"[{channel}] Memulai Perhitungan SVD")
+    if sendFeedback:
+        state.sendUpdateState(gprocessd(13,channel), "Menghitung Nilai Eigen")
+    
+    r_eigval, r_eig = EigenV(r, updater=updater(state, channel, 13, 23, sendFeedback))
 
     #shaping matrix
+    if sendFeedback:
+        state.sendUpdateState(gprocessd(24,channel), "Membentuk Matriks SVD")
+
     rows, cols = A.shape
     r_sigmum = np.sqrt(np.abs(r_eigval))
     l_sigmum = np.sqrt(np.abs(l_eigval))
@@ -62,28 +61,26 @@ async def build_decom(A: np.ndarray,*, sendProgress=False, state:State=None, sta
     rank = 0
 
     for x in r_sigmum:
+        if sendFeedback and cnt % 50 == 0:
+            state.sendUpdateState(gprocessd(25 + cnt/len(r_sigmum) * 10,channel), "Membentuk Matriks SVD")
+
         cnt += 1
-        if sendProgress and cnt % 25 == 0:
-            await state.sendUpdateState(
-                counter_calc(26 + 10*(cnt/len(r_sigmum)), startCounter, endCounter,38),
-                f"[{channel}] Mencari nilai Singular L")
 
         if(abs(x)>np.finfo(float).eps):
             rank+=1
         if(abs(x)>np.finfo(float).eps and i<min(l_singular.shape[0],r_singular.shape[0])):
             l_singular[:,i] = (A@r_singular[i,:])*(1/x)
             i+=1
+
     
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(37, startCounter, endCounter,38),
-        f"[{channel}] Menormalisasi Singular L")
-    
+    if sendFeedback:
+        state.sendUpdateState(gprocessd(36,channel), "Normalisasi Matriks")
+
     l_singular = l_singular.T
     sklearn.preprocessing.normalize(l_singular, norm="l2", axis=1, copy=False)
     l_singular = l_singular.T
 
-    if sendProgress:
-        await state.sendUpdateState(counter_calc(38, startCounter, endCounter,38),
-        f"[{channel}] Proses dekomposisi selesai")
+    if sendFeedback:
+        state.sendUpdateState(gprocessd(37,channel), "SVD Selesai")
 
     return l_singular, sigm, r_singular, rank
