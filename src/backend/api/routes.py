@@ -12,90 +12,92 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import uvicorn
 
-app = FastAPI()
-state:State = None
+def build_api(state):
+  app = FastAPI()
 
-origin = [
-  "http://localhost:3000",
-  "http://localhost",
-  "https://compress.bayusamudra.my.id"
-]
+  origin = [
+    "http://localhost:3000",
+    "http://localhost",
+    "https://compress.bayusamudra.my.id"
+  ]
 
-app.add_middleware(
-  CORSMiddleware, 
-  allow_origins=origin,
-  allow_methods=["*"],
-  allow_headers=["*"],
-  allow_credentials=True
-)
+  app.add_middleware(
+    CORSMiddleware, 
+    allow_origins=origin,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True
+  )
 
-app.state =  State()
-app.mount("/ws", build_socket(app.state), "Socket")
+  app.mount("/ws", build_socket(state), "Socket")
 
-@app.get("/")
-async def root_path():
-  return {"status": "success"}
+  @app.get("/")
+  async def root_path():
+    return {"status": "success"}
 
-@app.get("/status")
-async def ping():
-  return {"status": "success", "isReady" : app.state.getState("isReady")}
+  @app.get("/status")
+  async def ping():
+    return {"status": "success", "isReady" : state.getState("isReady")}
 
-@app.post("/upload")
-async def upload(token:str = Form(...), file: UploadFile = File(...)):
-  if file.content_type.lower() != "image/png" and \
-      file.content_type.lower() != "image/jpg" and \
-      file.content_type.lower() != "image/jpeg":
-    print(file.content_type.lower())
-    raise HTTPException(status_code=400, detail="Tipe data gambar tidak diizinkan")
+  @app.post("/upload")
+  async def upload(token:str = Form(...), file: UploadFile = File(...)):
+    if file.content_type.lower() != "image/png" and \
+        file.content_type.lower() != "image/jpg" and \
+        file.content_type.lower() != "image/jpeg":
+      print(file.content_type.lower())
+      raise HTTPException(status_code=400, detail="Tipe data gambar tidak diizinkan")
 
-  if token == app.state.getState("subscribeSID"):
-    imageFile = file.file
-    matrix = convertFileToArray(imageFile)
+    if token == state.getState("subscribeSID"):
+      imageFile = file.file
+      matrix = convertFileToArray(imageFile)
 
-    
-    app.state.setState("imageReady", False)
-    app.state.setState("imageLoaded", True)
-    app.state.setState("imageMatrix", matrix)
-    app.state.setState("format", file.content_type.lower())
+      
+      state.setState("imageReady", False)
+      state.setState("imageLoaded", True)
+      state.setState("imageMatrix", matrix)
+      state.setState("format", file.content_type.lower())
 
-    filename = file.filename.split(".")
+      filename = file.filename.split(".")
 
-    app.state.setState("filename", ".".join(filename[:-1]))
-    app.state.setState("extension",filename[-1])
-    return {"success": True}
-  else:
-    raise HTTPException(status_code=403, detail="Anda tidak memiliki akses untuk upload")
+      state.setState("filename", ".".join(filename[:-1]))
+      state.setState("extension",filename[-1])
+      return {"success": True}
+    else:
+      raise HTTPException(status_code=403, detail="Anda tidak memiliki akses untuk upload")
 
-@app.get("/compress/{level}/download/")
-async def downloadCompressedImage(level: int, alpha: Optional[bool] = False):
-  if not app.state.getState("imageReady"):
-    raise HTTPException(status_code=404, detail="Gambar belum diproses")
-  else:
-    res, _ = await compress_image_by_cache(app.state, level, alpha=alpha)
-    f = convertArrayToIO(res, app.state.getState("format"))
+  @app.get("/compress/{level}/download/")
+  async def downloadCompressedImage(level: int, alpha: Optional[bool] = False):
+    if not state.getState("imageReady"):
+      raise HTTPException(status_code=404, detail="Gambar belum diproses")
+    else:
+      res, _ = await compress_image_by_cache(state, level, alpha=alpha)
+      f = convertArrayToIO(res, state.getState("format"))
 
-    filename = app.state.getState("filename") + "." + str(level) + "." + app.state.getState("extension")
+      filename = state.getState("filename") + "." + str(level) + "." + state.getState("extension")
 
-    return Response(f.read(), 
-      headers={"Content-Disposition": f'attachment; filename="{filename}"'}, 
-      media_type="application/octet-stream")
+      return Response(f.read(), 
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}, 
+        media_type="application/octet-stream")
 
-@app.get("/compress/{level}/level/")
-async def getLevel(level: int, alpha: Optional[bool] = False):
-  _, level = await compress_image_by_cache(app.state, round(level, 3), alpha=alpha)
+  @app.get("/compress/{level}/status/")
+  async def getLevel(level: int, alpha: Optional[bool] = False):
+    _, level = await compress_image_by_cache(state, round(level, 3), alpha=alpha)
 
-  return {"success": True, "compress": level}
+    return {"success": True, "compress": level}
 
-@app.get("/compress/{level}")
-async def compressImage(level: int, alpha: Optional[bool] = False):
-  if not app.state.getState("imageReady"):
-    raise HTTPException(status_code=404, detail="Gambar belum diproses")
-  else:
-    res,_ = await compress_image_by_cache(app.state, level, alpha=alpha)
-    f = convertArrayToIO(res, app.state.getState("format"))
+  @app.get("/compress/{level}")
+  async def compressImage(level: int, alpha: Optional[bool] = False):
+    if not state.getState("imageReady"):
+      raise HTTPException(status_code=404, detail="Gambar belum diproses")
+    else:
+      res,_ = await compress_image_by_cache(state, level, alpha=alpha)
+      f = convertArrayToIO(res, state.getState("format"))
 
-    return StreamingResponse(f, media_type=app.state.getState("format"))
+      return StreamingResponse(f, media_type=state.getState("format"))
+
+  return app
 
 def run_server_one(port=80):
-  uvicorn.run("api.routes:app", host="0.0.0.0", port=port)
+  app = build_api(State())
+  uvicorn.run(app, host="0.0.0.0", port=port)
   
