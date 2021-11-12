@@ -98,4 +98,4 @@ def run_server(state_data: State):
   global state
   state = state_data
 
-  uvicorn.run("api.routes:app", port=5502)
+  uvicorn.run("api.routes:app", port=5502, workers=1, reload=False)
