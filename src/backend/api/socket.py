@@ -5,7 +5,8 @@ from threading import Thread
 
 def build_socket(state: st):
   sio = socketio.AsyncServer(
-            async_mode='asgi'
+    async_mode='asgi',
+    cors_allowed_origins=[]
   )
 
   state.setState("ws", sio)
