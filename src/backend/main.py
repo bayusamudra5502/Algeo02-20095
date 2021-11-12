@@ -19,12 +19,10 @@ def main():
   print("--------")
   print()
 
-  state = State()
-
   if len(sys.argv) > 1:
-    run_server_one(state, int(sys.argv[1]))
+    run_server_one(int(sys.argv[1]))
   else:
-    run_server_one(state)
+    run_server_one()
 
 if __name__ == "__main__":
   main()
