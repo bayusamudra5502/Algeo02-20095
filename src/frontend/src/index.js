@@ -5,16 +5,23 @@ import reportWebVitals from "./reportWebVitals";
 import { ConnectionProvider } from "./components/context/ConnectionContext";
 import { ProcessProvider } from "./components/context/ProcessContext";
 
+import { SocketProvider } from "./service/context/SocketContext";
+import { MessageProvider } from "./components/context/MessageContext";
+
 import "bootstrap/scss/bootstrap.scss";
 import "./styles/index.scss";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ConnectionProvider>
-      <ProcessProvider>
-        <App />
-      </ProcessProvider>
-    </ConnectionProvider>
+    <MessageProvider>
+      <ConnectionProvider>
+        <SocketProvider>
+          <ProcessProvider>
+            <App />
+          </ProcessProvider>
+        </SocketProvider>
+      </ConnectionProvider>
+    </MessageProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
