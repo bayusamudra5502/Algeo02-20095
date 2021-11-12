@@ -1,5 +1,5 @@
 from typing import Optional
-from starlette.responses import Response
+from starlette.responses import RedirectResponse, Response
 from lib.converter.convert import *
 from fastapi.datastructures import UploadFile
 from fastapi.params import File, Form
@@ -9,6 +9,7 @@ from api.state import *
 from api.state import State
 from lib.processing.imgprocess import compress_image_by_cache
 from fastapi.middleware.cors import CORSMiddleware
+from api.socket import setState, getSocketApp
 
 import uvicorn
 
@@ -94,8 +95,14 @@ async def compressImage(level: int, alpha: Optional[bool] = False):
 
     return StreamingResponse(f, media_type=state.getState("format"))
 
-def run_server(state_data: State):
+def run_server_one(state_data: State, port=80):
   global state
-  state = state_data
+  state =  state_data
 
-  uvicorn.run("api.routes:app", port=5502, workers=1, reload=False)
+  setState(state_data)
+  socket = getSocketApp()
+
+  app.mount("/ws", socket, "Socket")
+
+  uvicorn.run("api.routes:app", port=port)
+  

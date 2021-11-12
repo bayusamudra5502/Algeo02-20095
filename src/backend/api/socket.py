@@ -1,21 +1,9 @@
-from fastapi import params
 import socketio
-import uvicorn
 from api.state import State as st
 from lib.processing.imgprocess import build_decom_state
 from threading import Thread
 
-origin = [
-  "http://localhost:3000",
-  "http://localhost:5502",
-  "http://localhost",
-  "https://compress.bayusamudra.my.id"
-]
-
-sio = socketio.AsyncServer(
-          async_mode='asgi',
-          cors_allowed_origins=origin
-        )
+sio = socketio.AsyncServer(async_mode='asgi')
         
 app = socketio.ASGIApp(sio)
 state: st = None
@@ -58,10 +46,11 @@ async def disconnect(sid):
   if state.getState("subscribeSID") == sid:
     state.reset()
 
-def run_ws(State:st):
+def setState(State: st):
   global state
   state = State
 
+def getSocketApp():
   state.setState("ws", sio)
 
-  uvicorn.run("api.socket:app", port=5503, workers=1, reload=False)
+  return app
