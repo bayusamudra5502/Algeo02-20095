@@ -64,4 +64,4 @@ def run_ws(State:st):
 
   state.setState("ws", sio)
 
-  uvicorn.run("api.socket:app", port=5503)
+  uvicorn.run("api.socket:app", port=5503, workers=1, reload=False)
