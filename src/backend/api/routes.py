@@ -99,5 +99,5 @@ def build_api(state):
 
 def run_server_one(port=80):
   app = build_api(State())
-  uvicorn.run(app, host="0.0.0.0", port=port)
+  uvicorn.run(app, host="0.0.0.0", port=port, reload=False, workers=1)
   
