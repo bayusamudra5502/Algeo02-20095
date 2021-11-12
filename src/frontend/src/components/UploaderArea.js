@@ -1,12 +1,16 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { FiInbox, FiAlertOctagon, FiArrowDown } from "react-icons/fi";
+import { BsCloudSlash } from "react-icons/bs";
+import ConnectionContext from "./context/ConnectionContext";
 
 export default function UploadArea({ onFileLoaded }) {
   const onDropAccepted = function (acceptedFile) {
     console.dir(acceptedFile);
     onFileLoaded && onFileLoaded(acceptedFile[0]);
   };
+
+  const { isConnected } = useContext(ConnectionContext);
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } =
     useDropzone({
@@ -62,12 +66,22 @@ export default function UploadArea({ onFileLoaded }) {
   }, [isDragActive, isDragReject]);
 
   return (
-    <>
-      <div className="overlay"></div>
+    <div className="upload-container-outer">
+      {!isConnected && (
+        <div className="overlay">
+          <div className="text">
+            <div className="icon">
+              <BsCloudSlash />
+            </div>
+            <p className="h5">Anda belum tersambung</p>
+            <p>Silahkan sambungkan program ini sebelum mengupload gambar</p>
+          </div>
+        </div>
+      )}
       <div {...getRootProps({ className })}>
         <input {...getInputProps()} />
         {pesan}
       </div>
-    </>
+    </div>
   );
 }
