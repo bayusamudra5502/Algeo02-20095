@@ -104,5 +104,5 @@ def run_server_one(state_data: State, port=80):
 
   app.mount("/ws", socket, "Socket")
 
-  uvicorn.run("api.routes:app", port=port)
+  uvicorn.run("api.routes:app", host="0.0.0.0",port=port)
   
