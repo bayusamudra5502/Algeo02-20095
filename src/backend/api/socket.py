@@ -49,8 +49,7 @@ async def disconnect(sid):
 def setState(State: st):
   global state
   state = State
-
-def getSocketApp():
   state.setState("ws", sio)
 
+def getSocketApp():
   return app

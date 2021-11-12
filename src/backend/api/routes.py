@@ -1,5 +1,5 @@
 from typing import Optional
-from starlette.responses import RedirectResponse, Response
+from starlette.responses import Response
 from lib.converter.convert import *
 from fastapi.datastructures import UploadFile
 from fastapi.params import File, Form
@@ -18,7 +18,6 @@ state:State = None
 
 origin = [
   "http://localhost:3000",
-  "http://localhost:5502",
   "http://localhost",
   "https://compress.bayusamudra.my.id"
 ]
@@ -26,10 +25,13 @@ origin = [
 app.add_middleware(
   CORSMiddleware, 
   allow_origins=origin,
-  allow_methods=["GET","POST"],
+  allow_methods=["*"],
   allow_headers=["*"],
   allow_credentials=True
 )
+
+socket = getSocketApp()
+app.mount("/ws", socket, "Socket")
 
 @app.get("/")
 async def root_path():
@@ -98,11 +100,7 @@ async def compressImage(level: int, alpha: Optional[bool] = False):
 def run_server_one(state_data: State, port=80):
   global state
   state =  state_data
-
   setState(state_data)
-  socket = getSocketApp()
 
-  app.mount("/ws", socket, "Socket")
-
-  uvicorn.run("api.routes:app", host="0.0.0.0",port=port)
+  uvicorn.run("api.routes:app", host="0.0.0.0", port=port)
   
