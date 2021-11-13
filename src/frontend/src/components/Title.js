@@ -1,15 +1,12 @@
+import React, { useContext, useState } from "react";
 import picture from "../assets/pictures.png";
-import Progress from "./Progress";
 import { Modal } from "react-bootstrap";
-import { useContext, useState } from "react";
 import ConnectionContext from "./context/ConnectionContext";
-import ProcessContext from "./context/ProcessContext";
 import ConnectComponent from "./Connect";
 
 export default function Title() {
   const [showAbout, setAbout] = useState(false);
   const { isConnected, setConnect } = useContext(ConnectionContext);
-  const { compressState } = useContext(ProcessContext);
 
   const handleClose = () => setAbout(false);
   const handleOpen = () => setAbout(true);
@@ -40,14 +37,6 @@ export default function Title() {
             {!isConnected ? <ConnectComponent onConnected={onConnected} /> : ""}
           </div>
         </div>
-        {compressState.isCompressing ? (
-          <div>
-            <h2 className="sub-judul">Proses Kompresi</h2>
-            <Progress value={compressState.progress} animated={true}></Progress>
-          </div>
-        ) : (
-          ""
-        )}
         <div className="bottom">
           <h2 className="sub-judul">Tentang Program ini</h2>
           <p>Program ini dibuat oleh kelompok X</p>

@@ -2,6 +2,8 @@
 @import "sidebar";
 @import "title";
 @import "uploader";
+@import "animation";
+@import "result";
 
 * {
   margin: 0;
@@ -14,6 +16,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  user-select: none;
 }
 
 body {

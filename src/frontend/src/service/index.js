@@ -14,12 +14,12 @@ export async function sendImage(server, token, image, updater = () => {}) {
   const payload = new FormData();
 
   payload.append("token", token);
-  payload.append("image", image);
+  payload.append("file", image);
 
   try {
     await axios.post(`${server}/upload`, payload, {
       onUploadProgress: function (e) {
-        updater((e.loaded * 100) / e.total);
+        updater(e.loaded / e.total);
       },
     });
 

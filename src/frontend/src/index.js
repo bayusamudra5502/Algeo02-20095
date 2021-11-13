@@ -10,6 +10,7 @@ import { MessageProvider } from "./components/context/MessageContext";
 
 import "bootstrap/scss/bootstrap.scss";
 import "./styles/index.scss";
+import { ResultProvider } from "./components/context/ResultContext";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,7 +18,9 @@ ReactDOM.render(
       <ConnectionProvider>
         <SocketProvider>
           <ProcessProvider>
-            <App />
+            <ResultProvider>
+              <App />
+            </ResultProvider>
           </ProcessProvider>
         </SocketProvider>
       </ConnectionProvider>

@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function Progress({ value, animated }) {
   return (
     <div className="progress">

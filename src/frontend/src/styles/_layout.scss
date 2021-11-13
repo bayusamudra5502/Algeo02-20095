@@ -59,3 +59,28 @@ input[type="radio"] + label {
   display: inline-block;
   margin: 0 5px;
 }
+
+.right-container {
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.spinning {
+  animation: spin-frame infinite 15s linear;
+}
+
+@keyframes spin-frame {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

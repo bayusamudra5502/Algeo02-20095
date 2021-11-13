@@ -1,17 +1,50 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useReducer } from "react";
 
 const ProcessContext = createContext();
 
+function reducer(state, action) {
+  return { ...state, ...action };
+}
+
 export function ProcessProvider({ children }) {
-  const [isUploading, setUploadState] = useState(false);
-  const [compressState, setCompressState] = useState({
-    isCompressing: false,
+  const [uploadState, setUploadState] = useReducer(reducer, {
+    isUploadComplete: false,
+    isUploading: false,
     progress: 0,
   });
 
+  const [compressState, setCompressState] = useReducer(reducer, {
+    isCompressing: false,
+    isCompressComplete: false,
+    progress: 0,
+  });
+
+  const resetUpload = () => {
+    setUploadState({
+      isUploadComplete: false,
+      isUploading: false,
+      progress: 0,
+    });
+  };
+
+  const resetCompress = () => {
+    setCompressState({
+      isCompressing: false,
+      isCompressComplete: false,
+      progress: 0,
+    });
+  };
+
   return (
     <ProcessContext.Provider
-      value={{ isUploading, setUploadState, compressState, setCompressState }}
+      value={{
+        uploadState,
+        setUploadState,
+        compressState,
+        setCompressState,
+        resetUpload,
+        resetCompress,
+      }}
     >
       {children}
     </ProcessContext.Provider>

@@ -5,19 +5,19 @@
   "homepage": "https://compress.bayusamudra.my.id/",
   "dependencies": {
     "@popperjs/core": "^2.10.2",
+    "@reach/router": "^1.3.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.24.0",
     "bootstrap": "^5.1.3",
-    "formik": "^2.2.9",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.4.2",
     "react-icons": "^4.3.1",
-    "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
+    "react-transition-group": "^4.4.2",
     "sass": "^1.43.4",
     "socket.io-client": "^4.3.2",
     "web-vitals": "^1.0.1"
@@ -45,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react": "^7.27.0"
   }
 }

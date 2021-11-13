@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Alert,
   Col,
@@ -58,11 +58,16 @@ export default function ConnectComponent({ onConnected }) {
     }
 
     if (await getStatus(`${url}:${port}`)) {
-      await connectSocket(`${url}:${port}`, dispatchConnect);
+      await connectSocket(`${url}:${port}`, dispatchConnect, (response) => {
+        if (response.success) {
+          onConnected && onConnected();
+          showMessage("Berhasil tersambung", "success");
+        } else {
+          showMessage("Gagal menyambungkan socket", "error");
+        }
+      });
 
-      onConnected && onConnected();
       onClose();
-      showMessage("Berhasil tersambung", "success");
     } else {
       showMessage("Server saat ini tidak bisa digunakan", "error");
     }

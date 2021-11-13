@@ -1,10 +1,15 @@
 import "./styles/index.scss";
-import Content from "./components/Content";
+import React, { Router } from "@reach/router";
+import Homepage from "./views/Homepage";
+import Result from "./views/Result";
 
 function App() {
   return (
     <div className="App">
-      <Content></Content>
+      <Router>
+        <Homepage path="/" />
+        <Result path="/result" to="/" />
+      </Router>
     </div>
   );
 }

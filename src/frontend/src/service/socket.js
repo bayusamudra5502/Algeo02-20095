@@ -4,7 +4,8 @@ import { getStatus } from ".";
 
 export default async function connectSocket(
   server = data.defaultServer,
-  callback
+  callback,
+  connectionResponse = () => {}
 ) {
   const socket = io(`${server}`, { path: "/ws/socket.io" });
 
@@ -35,17 +36,24 @@ export default async function connectSocket(
       callback({ progress: data });
     });
 
-    function subscribe() {
+    socket.on("connection-response", (data) => {
+      connectionResponse(data);
+      if (!data?.success) {
+        socket.disconnect();
+      }
+    });
+
+    const subscribe = function () {
       socket.emit("subscribe", {});
-    }
+    };
 
-    function unsubscribe() {
+    const unsubscribe = function () {
       socket.emit("unsubscribe", {});
-    }
+    };
 
-    function buildMatrix() {
+    const buildMatrix = function () {
       socket.emit("build-matrix", {});
-    }
+    };
 
     callback({ helper: { subscribe, unsubscribe, buildMatrix } });
 

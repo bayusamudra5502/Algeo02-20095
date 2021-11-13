@@ -31,6 +31,8 @@ def build_socket(state: st):
   @sio.on("build-matrix")
   async def buildMatrix(sid, _):
     if state.getState("subscribeSID") == sid and state.getState("imageLoaded"):
+      print("INFO:\tMemulai Membangun Matriks")
+
       B = Thread(target=build_decom_state, args=(state,), daemon=True)
       B.start()
 

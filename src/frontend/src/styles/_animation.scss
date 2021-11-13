@@ -1,0 +1,17 @@
+.no-connection-exit {
+  opacity: 1;
+}
+
+.no-connection-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+}

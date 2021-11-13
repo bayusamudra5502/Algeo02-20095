@@ -1,0 +1,90 @@
+.display-image {
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  flex-direction: column;
+
+  img {
+    width: 100%;
+  }
+
+  .sub-judul {
+    margin: 20px 0;
+  }
+
+  .image {
+    position: relative;
+
+    div {
+      padding: 20px;
+    }
+  }
+
+  .layer {
+    width: 100%;
+    top: 0;
+    position: absolute;
+    height: 100%;
+    transition: opacity 250ms ease-in-out, background 250ms ease-in-out;
+    border-radius: 5px;
+    background-color: transparent;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    flex-direction: column;
+    color: white;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.4);
+      opacity: 1;
+    }
+  }
+}
+
+.show-grid {
+  background: url("../assets/tiles.png");
+}
+
+.result {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  .title-result {
+    width: 350px;
+    text-align: center;
+  }
+
+  img {
+    max-width: 150px;
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+.result-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.configuration {
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    margin: 10px;
+    padding: 10px;
+    min-width: 260px;
+  }
+}
