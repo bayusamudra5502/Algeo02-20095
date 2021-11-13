@@ -1,12 +1,19 @@
 import React, { useContext, useState } from "react";
 import picture from "../assets/pictures.png";
-import { Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import ConnectionContext from "./context/ConnectionContext";
 import ConnectComponent from "./Connect";
+import ProcessContext from "./context/ProcessContext";
+import UploadContext from "./context/UploadContext";
 
 export default function Title() {
   const [showAbout, setAbout] = useState(false);
   const { isConnected, setConnect } = useContext(ConnectionContext);
+  const { isCacheAlpha, setCacheAlpha } = useContext(UploadContext);
+
+  const {
+    uploadState: { isUploadComplete, isUploading },
+  } = useContext(ProcessContext);
 
   const handleClose = () => setAbout(false);
   const handleOpen = () => setAbout(true);
@@ -36,6 +43,17 @@ export default function Title() {
             {isConnected ? "Tersambung" : "Tidak Tersambung"}
             {!isConnected ? <ConnectComponent onConnected={onConnected} /> : ""}
           </div>
+        </div>
+        {}
+        <div className="bottom">
+          <h2 className="sub-judul">Mode Cache</h2>
+          <Form.Check
+            id="cache-alpha"
+            label="Cache Channel Alpha"
+            checked={isCacheAlpha}
+            onChange={() => setCacheAlpha(!isCacheAlpha)}
+            disabled={isUploadComplete || isUploading}
+          ></Form.Check>
         </div>
         <div className="bottom">
           <h2 className="sub-judul">Tentang Program ini</h2>

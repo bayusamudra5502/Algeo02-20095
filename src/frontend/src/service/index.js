@@ -10,11 +10,18 @@ export async function getStatus(server) {
   }
 }
 
-export async function sendImage(server, token, image, updater = () => {}) {
+export async function sendImage(
+  server,
+  token,
+  image,
+  cacheAlpha,
+  updater = () => {}
+) {
   const payload = new FormData();
 
   payload.append("token", token);
   payload.append("file", image);
+  payload.append("alpha", cacheAlpha ? 1 : 0);
 
   try {
     await axios.post(`${server}/upload`, payload, {
@@ -30,11 +37,11 @@ export async function sendImage(server, token, image, updater = () => {}) {
   }
 }
 
-export async function getActualCompress(server, level) {
+export async function getStatusCompress(server, level) {
   try {
     const { data } = await axios.get(`${server}/compress/${level}/status`);
 
-    return data.compress;
+    return data;
   } catch (err) {
     console.error(err);
     return null;
