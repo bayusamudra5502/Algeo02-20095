@@ -63,7 +63,6 @@ def build_api(state):
       else:
         state.setState("isAlphaAvailable", alpha)
 
-
       filename = file.filename.split(".")
 
       state.setState("filename", ".".join(filename[:-1]))
@@ -79,7 +78,7 @@ def build_api(state):
       raise HTTPException(status_code=404, detail="Gambar belum diproses")
     else:
       res, _ = await compress_image_by_cache(state, level, alpha=alpha)
-      f = convertArrayToIO(res, state.getState("imageMode") ,state.getState("format"))
+      f = await convertArrayToIO(res, state.getState("imageMode") ,state.getState("format"))
 
       filename = state.getState("filename") + "." + str(level) + "." + state.getState("extension")
 
@@ -99,7 +98,7 @@ def build_api(state):
       raise HTTPException(status_code=404, detail="Gambar belum diproses")
     else:
       res,_ = await compress_image_by_cache(state, level, alpha=alpha)
-      f = convertArrayToIO(res, state.getState("imageMode"), state.getState("format"))
+      f = await convertArrayToIO(res, state.getState("imageMode"), state.getState("format"))
 
       return StreamingResponse(f, media_type=state.getState("format"))
 

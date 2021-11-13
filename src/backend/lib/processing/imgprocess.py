@@ -125,6 +125,6 @@ def build_decom_state(state:State):
     state.setState("imageReady", True)
 
     end_time = time_ns()
-    
+
     state.setState("execTime", end_time - start_time)
     
