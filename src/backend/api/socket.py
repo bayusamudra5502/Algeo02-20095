@@ -23,8 +23,10 @@ def build_socket(state: st):
       state.setState("subscribeSID", sid)
       state.setState("isReady", False)
       await sio.emit("response", data={"success": True}, to=state.getState("subscribeSID"))
+      await sio.emit("connection-response", data={"success": True}, to=state.getState("subscribeSID"))
     else:
       await sio.emit("response", data={"success": False}, to=sid)
+      await sio.emit("connection-response", data={"success": False}, to=sid)
 
   @sio.on("build-matrix")
   async def buildMatrix(sid, _):
