@@ -23,6 +23,9 @@ class State:
     self.__data["format"] = None
     self.__data["filename"] = None
     self.__data["imageLoaded"] = False
+    self.__data["imageMode"] = None
+    self.__data["execTime"] = None
+    self.__data["isAlphaAvailable"] = True
   
   # Socket Handler
   def sendUpdateState(self, value, comment):
