@@ -58,17 +58,13 @@ def build_decom(A: np.ndarray, *, state:State=None, channel="W", sendFeedback=Fa
 
     cnt = 0
     i = 0
-    rank = 0
 
     for x in r_sigmum:
         if sendFeedback and cnt % 50 == 0:
             state.sendUpdateState(gprocessd(25 + cnt/len(r_sigmum) * 10,channel), "Membentuk Matriks SVD")
 
         cnt += 1
-
-        if(abs(x)>np.finfo(float).eps):
-            rank+=1
-        if(abs(x)>np.finfo(float).eps and i<min(l_singular.shape[0],r_singular.shape[0])):
+        if(abs(x)>1e-9 and i<min(l_singular.shape[0],r_singular.shape[0])):
             l_singular[:,i] = (A@r_singular[i,:])*(1/x)
             i+=1
 
@@ -82,5 +78,5 @@ def build_decom(A: np.ndarray, *, state:State=None, channel="W", sendFeedback=Fa
 
     if sendFeedback:
         state.sendUpdateState(gprocessd(37,channel), "SVD Selesai")
-
+    rank = np.sum(sigm>1e-6)
     return l_singular, sigm, r_singular, rank

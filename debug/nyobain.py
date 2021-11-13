@@ -200,7 +200,8 @@ def build_decom(A: np.ndarray):
 
 # M = compress_image(M, 50)
 # convertArrayToIO(M)
-im = Image.open("data/lena.png")
+im = Image.open("data/D.png")
+p = im.mode
 # print(im.mode)
 # M = np.array(im.getpalette())
 # N = np.array(im.getchannel(1))
@@ -216,15 +217,15 @@ im = Image.open("data/lena.png")
 # print(M)
 # print(M)
 M = np.array(im.convert("RGBA"))
-R, G, B, A = inspectColor(M)
-R, G, B, A = compress_all(R, G, B, A, 130)
-M = np.uint8((np.dstack((R, G, B, A))))
-# x, y, z = M.shape
-# # M = M.reshape(x, y, 4)
+# R, G, B, A = inspectColor(M)
+# R, G, B, A = compress_all(R, G, B, A, 50)
+# M = np.uint8((np.dstack((R, G, B, A))))
+# # x, y, z = M.shape
+# # # M = M.reshape(x, y, 4)
 im = Image.fromarray(M)
-# im.putpalette(M)
-im = im.convert('L')
-# im = im.convert(p)
+# # im.putpalette(M)
+# im = im.convert("RGBA")
+im = im.convert(p)
 im.save("data/image.png")
 
 # f.seek(0)
