@@ -4,10 +4,11 @@ import io
 
 def convertFileToArray(file):
   with Image.open(file) as im:
-    return np.array(im.convert("RGBA"))
+    return np.array(im.convert("RGBA")), im.mode
 
-def convertArrayToIO(array: np.ndarray, mime:str="image/png"):
+def convertArrayToIO(array: np.ndarray, md:str, mime:str="image/png"):
   im = Image.fromarray(array)
+  im = im.convert(md)
   f = io.BytesIO()
 
   if mime == "image/png":
@@ -18,3 +19,4 @@ def convertArrayToIO(array: np.ndarray, mime:str="image/png"):
 
   f.seek(0)
   return f
+
