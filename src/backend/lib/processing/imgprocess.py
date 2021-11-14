@@ -2,8 +2,9 @@ import numpy as np
 import math
 from lib.svd.svd import build_decom
 from api.state import State
-from threading import Thread
 from time import time_ns
+import ray
+# from threading import Thread
 
 def inspectColor(Im):
     return np.copy(np.int32(np.array(Im[:,:,0]))), \
@@ -85,6 +86,10 @@ def calculate_decom(M, cache, channel, state):
     u, sigm, v, rank = build_decom(M, state=state, channel=channel, sendFeedback=True)
     cache[channel] = (u, sigm, v, rank)
 
+@ray.remote
+def calculate_decom_ray(M, channel):
+    u, sigm, v, rank = build_decom(M, state=None, channel=channel, sendFeedback=False)
+    return u, sigm, v, rank
 
 def build_decom_state(state:State):
     start_time = time_ns()
@@ -96,31 +101,50 @@ def build_decom_state(state:State):
 
     cache = {}
 
-    Rth = Thread(target=calculate_decom, args=(R,cache,"R", state), daemon=True)
-    Gth = Thread(target=calculate_decom, args=(G,cache,"G", state), daemon=True)
-    Bth = Thread(target=calculate_decom, args=(B,cache,"B", state), daemon=True)
-    Ath = Thread(target=calculate_decom, args=(A,cache,"A", state), daemon=True)
+    state.sendUpdateState({"func":0, "progress": 2/20}, "Memulai Dekomposisi")
 
-    state.sendUpdateState({"func":0, "progress": 2/20}, "Menjalankan Thread")
-    Rth.start()
-    Gth.start()
-    Bth.start()
+    Rr = calculate_decom_ray.remote(R, "R")
+    Gr = calculate_decom_ray.remote(G, "G")
+    Br = calculate_decom_ray.remote(B, "B")
+    Ar = None
 
     if state.getState("isAlphaAvailable"):
-        Ath.start()
-    else:
-        state.sendUpdateState({
-            "func": 1,
-            "channel": "A",
-            "value": 1
-        }, "SVD Selesai")
+        Ar = calculate_decom_ray.remote(A, "A")
+    
 
-    Rth.join()
-    Gth.join()
-    Bth.join()
+    cache["R"] = ray.get(Rr)
+
+    state.sendUpdateState({
+        "func": 1,
+        "channel": "A",
+        "value": 1
+    }, "Dekomposisi R selesai")
+
+    cache["G"] = ray.get(Gr)
+
+    state.sendUpdateState({
+        "func": 1,
+        "channel": "G",
+        "value": 1
+    }, "Dekomposisi G Selesai")
+
+    cache["B"] = ray.get(Br)
+
+    state.sendUpdateState({
+        "func": 1,
+        "channel": "B",
+        "value": 1
+    }, "Dekomposisi B Selesai")
+
 
     if state.getState("isAlphaAvailable"):
-        Ath.join()
+        cache["A"] = ray.get(Ar)
+        
+    state.sendUpdateState({
+        "func": 1,
+        "channel": "A",
+        "value": 1
+    }, "Dekomposisi A selesai")
     
     state.sendUpdateState({"func":0, "progress": 20/20}, "Proses dekomposisi selesai")
 

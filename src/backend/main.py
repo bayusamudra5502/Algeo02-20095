@@ -1,6 +1,6 @@
 import sys
 from api.routes import run_server_one
-from api.state import State
+import ray
 
 def main():
   print("""\u001b[32m
@@ -18,6 +18,8 @@ def main():
 
   print("--------")
   print()
+
+  ray.init()
 
   if len(sys.argv) > 1:
     run_server_one(int(sys.argv[1]))
