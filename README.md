@@ -2,7 +2,7 @@
 
 # Image Compressor
 
-### Tugas Aljabar Linear dan Geometri
+### 	IF2123  Aljabar Linear dan Geometri
 
 <i>Gambar diatas diambil dari Flaticon</i>
 
