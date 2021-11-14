@@ -30,6 +30,7 @@ export default function UploadArea() {
 
     sendImage(server, userid, acceptedFile[0], isCacheAlpha, (progress) => {
       setUploadState({
+        isUploading: true,
         progress,
       });
     })
@@ -117,7 +118,7 @@ export default function UploadArea() {
 
   return (
     <div className="upload-container-outer">
-      {!(uploadState.isUploading || uploadState.isUploadComplete) && (
+      {!uploadState.isUploading && (
         <>
           <CSSTransition
             in={!isConnected}

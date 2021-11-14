@@ -9,8 +9,7 @@ export default function Homepage() {
   return (
     <main>
       <Title></Title>
-      <UploadArea />
-      {uploadState.isUploadComplete && <Decomposition />}
+      {uploadState.isUploadComplete ? <Decomposition /> : <UploadArea />}
     </main>
   );
 }
