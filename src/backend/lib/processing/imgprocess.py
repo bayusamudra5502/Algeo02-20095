@@ -18,7 +18,8 @@ async def compress_to_k(A, k):
 async def compress_to_k_by_cache(state: State, k, color):
     u, sigm, v, rank = state.getState("SVDDecomp")[color]
     k = math.floor(rank*k/100)
-    compress = k/rank
+    m, n = sigm.shape
+    compress = ((m*k+k+n*k)/m*n)*100
 
     return (u[:,:k]@(sigm[:k, :k]@v[:k, :])), k, compress
 

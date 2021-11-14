@@ -200,7 +200,7 @@ def build_decom(A: np.ndarray):
 
 # M = compress_image(M, 50)
 # convertArrayToIO(M)
-im = Image.open("data/D.png")
+im = Image.open("data/RGBA.png")
 p = im.mode
 # print(im.mode)
 # M = np.array(im.getpalette())
