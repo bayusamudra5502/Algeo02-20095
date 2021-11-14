@@ -3,6 +3,7 @@ import math
 from lib.svd.svd import build_decom
 from api.state import State
 from threading import Thread
+from time import time_ns
 
 def inspectColor(Im):
     return np.copy(np.int32(np.array(Im[:,:,0]))), \
@@ -18,8 +19,10 @@ async def compress_to_k(A, k):
 async def compress_to_k_by_cache(state: State, k, color):
     u, sigm, v, rank = state.getState("SVDDecomp")[color]
     k = math.floor(rank*k/100)
-    m, n = sigm.shape
-    compress = ((m*k+k+n*k)/m*n)*100
+
+    m, n, _ = state.getState("imageMatrix").shape
+
+    compress = (m + n + 1) * k/ (m * n) 
 
     return (u[:,:k]@(sigm[:k, :k]@v[:k, :])), k, compress
 
@@ -56,10 +59,11 @@ async def compress_all_by_cache(state: State, k,alpha: bool= False, *, startCoun
 
     A = None
 
-    if alpha:
+    if alpha and state.getState("isAlphaAvailable"):
         A = await compress_to_k_by_cache(state, k, "A")
     else:
-        A = await compress_to_k_by_cache(state, 100, "A")
+        _,_,_,Atmp = inspectColor(state.getState("imageMatrix"))
+        A = [Atmp, 0, 1]
     
     state.sendUpdateState({"value": state.counter_calc(4, startCounter, endCounter, 4), "func": 2},
         "Proses kompresi berhasil")
@@ -70,7 +74,10 @@ async def compress_image_by_cache(s:State, k, *, startCounter=0, endCounter=1, a
     R,G,B,A = await compress_all_by_cache(s,k,startCounter=startCounter, endCounter=endCounter, alpha=alpha)
     mat = np.uint8((np.dstack((R[0], G[0], B[0], A[0]))))
 
-    compressLevel = (R[2] + G[2] + B[2] + A[2])/4
+    if not s.getState("isAlphaAvailable"):
+        compressLevel = (R[2] + G[2] + B[2])/3
+    else:
+        compressLevel = (R[2] + G[2] + B[2] + A[2])/4
 
     return mat, compressLevel
 
@@ -80,6 +87,8 @@ def calculate_decom(M, cache, channel, state):
 
 
 def build_decom_state(state:State):
+    start_time = time_ns()
+
     state.sendUpdateState({"func":0 , "progress": 1/20}, "Mempersiapkan prosess")
     state.setState("imageReady", False)
 
@@ -96,14 +105,29 @@ def build_decom_state(state:State):
     Rth.start()
     Gth.start()
     Bth.start()
-    Ath.start()
+
+    if state.getState("isAlphaAvailable"):
+        Ath.start()
+    else:
+        state.sendUpdateState({
+            "func": 1,
+            "channel": "A",
+            "value": 1
+        }, "SVD Selesai")
 
     Rth.join()
     Gth.join()
     Bth.join()
-    Ath.join()
+
+    if state.getState("isAlphaAvailable"):
+        Ath.join()
+    
     state.sendUpdateState({"func":0, "progress": 20/20}, "Proses dekomposisi selesai")
 
     state.setState("SVDDecomp", cache)
     state.setState("imageReady", True)
+
+    end_time = time_ns()
+
+    state.setState("execTime", end_time - start_time)
     

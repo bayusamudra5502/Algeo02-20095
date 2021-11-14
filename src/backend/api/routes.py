@@ -18,7 +18,8 @@ def build_api(state):
   origin = [
     "http://localhost:3000",
     "http://localhost",
-    "https://compress.bayusamudra.my.id"
+    "http://compress.bayusamudra.my.id",
+    "https://compress.bayusamudra.my.id",
   ]
 
   app.add_middleware(
@@ -26,7 +27,7 @@ def build_api(state):
     allow_origins=origin,
     allow_methods=["*"],
     allow_headers=["*"],
-    allow_credentials=True
+    allow_credentials=True,
   )
 
   app.mount("/ws", build_socket(state), "Socket")
@@ -40,27 +41,34 @@ def build_api(state):
     return {"status": "success", "isReady" : state.getState("isReady")}
 
   @app.post("/upload")
-  async def upload(token:str = Form(...), file: UploadFile = File(...)):
+  async def upload(token:str = Form(...), file: UploadFile = File(...), alpha: bool = Form(...)):
     if file.content_type.lower() != "image/png" and \
         file.content_type.lower() != "image/jpg" and \
         file.content_type.lower() != "image/jpeg":
-      print(file.content_type.lower())
       raise HTTPException(status_code=400, detail="Tipe data gambar tidak diizinkan")
 
     if token == state.getState("subscribeSID"):
       imageFile = file.file
-      matrix = convertFileToArray(imageFile)
-
+      matrix, mode = await convertFileToArray(imageFile)
       
       state.setState("imageReady", False)
       state.setState("imageLoaded", True)
       state.setState("imageMatrix", matrix)
-      state.setState("format", file.content_type.lower())
+      state.setState("imageMode", mode)
+
+      formatFile = file.content_type.lower()
+      state.setState("format", formatFile)
+
+      if formatFile != "image/png":
+        state.setState("isAlphaAvailable", False)
+      else:
+        state.setState("isAlphaAvailable", alpha)
 
       filename = file.filename.split(".")
 
       state.setState("filename", ".".join(filename[:-1]))
       state.setState("extension",filename[-1])
+
       return {"success": True}
     else:
       raise HTTPException(status_code=403, detail="Anda tidak memiliki akses untuk upload")
@@ -71,7 +79,7 @@ def build_api(state):
       raise HTTPException(status_code=404, detail="Gambar belum diproses")
     else:
       res, _ = await compress_image_by_cache(state, level, alpha=alpha)
-      f = convertArrayToIO(res, state.getState("format"))
+      f = await convertArrayToIO(res, state.getState("imageMode") ,state.getState("format"))
 
       filename = state.getState("filename") + "." + str(level) + "." + state.getState("extension")
 
@@ -83,7 +91,7 @@ def build_api(state):
   async def getLevel(level: int, alpha: Optional[bool] = False):
     _, level = await compress_image_by_cache(state, round(level, 3), alpha=alpha)
 
-    return {"success": True, "compress": level}
+    return {"success": True, "compress": level, "isAlphaAvailable": state.getState("isAlphaAvailable"), "executionTime": state.getState("execTime")}
 
   @app.get("/compress/{level}")
   async def compressImage(level: int, alpha: Optional[bool] = False):
@@ -91,7 +99,7 @@ def build_api(state):
       raise HTTPException(status_code=404, detail="Gambar belum diproses")
     else:
       res,_ = await compress_image_by_cache(state, level, alpha=alpha)
-      f = convertArrayToIO(res, state.getState("format"))
+      f = await convertArrayToIO(res, state.getState("imageMode"), state.getState("format"))
 
       return StreamingResponse(f, media_type=state.getState("format"))
 

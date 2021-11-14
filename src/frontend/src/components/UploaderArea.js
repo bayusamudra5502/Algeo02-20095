@@ -10,6 +10,7 @@ import { sendImage } from "../service";
 import SocketContext from "../service/context/SocketContext";
 import MessageContext from "./context/MessageContext";
 import { CSSTransition } from "react-transition-group";
+import UploadContext from "./context/UploadContext";
 
 export default function UploadArea() {
   const { uploadState, setUploadState, resetUpload } =
@@ -17,14 +18,17 @@ export default function UploadArea() {
   const {
     connectState: { server, userid },
   } = useContext(SocketContext);
+
   const { showMessage } = useContext(MessageContext);
+
+  const { isCacheAlpha } = useContext(UploadContext);
 
   const onDropAccepted = function (acceptedFile) {
     resetUpload();
 
     console.log(server);
 
-    sendImage(server, userid, acceptedFile[0], (progress) => {
+    sendImage(server, userid, acceptedFile[0], isCacheAlpha, (progress) => {
       setUploadState({
         progress,
       });

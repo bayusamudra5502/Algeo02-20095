@@ -2,11 +2,11 @@ from PIL import Image
 import numpy as np
 import io
 
-def convertFileToArray(file):
+async def convertFileToArray(file):
   with Image.open(file) as im:
     return np.array(im.convert("RGBA")), im.mode
 
-def convertArrayToIO(array: np.ndarray, md:str, mime:str="image/png"):
+async def convertArrayToIO(array: np.ndarray, md:str, mime:str="image/png"):
   im = Image.fromarray(array)
   im = im.convert(md)
   f = io.BytesIO()
