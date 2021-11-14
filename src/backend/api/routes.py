@@ -18,7 +18,8 @@ def build_api(state):
   origin = [
     "http://localhost:3000",
     "http://localhost",
-    "https://compress.bayusamudra.my.id"
+    "http://compress.bayusamudra.my.id",
+    "https://compress.bayusamudra.my.id",
   ]
 
   app.add_middleware(
@@ -26,7 +27,7 @@ def build_api(state):
     allow_origins=origin,
     allow_methods=["*"],
     allow_headers=["*"],
-    allow_credentials=True
+    allow_credentials=True,
   )
 
   app.mount("/ws", build_socket(state), "Socket")
