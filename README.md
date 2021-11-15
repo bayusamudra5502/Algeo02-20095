@@ -19,6 +19,14 @@ Berikut ini adalah struktur folder dari project ini:
   * Folder `backend` berisi program backend. Pada bagian ini berisi algoritma kompresi dan api.
   * Folder `frontend` berisi program frontend. Pada bagian ini berisi pengaturan tampilan dan lainnya.
 
+## Teknologi 
+Pada project ini, teknologi yang digunakan adalah
+* FastAPI
+* React
+* Socket.IO
+* Python
+* Scipy dan Numpy
+
 ## Cara menggunakan
 Untuk menggunakan program ini, anda dapat menggunakan backend yang telah disediakan ataupun menggunakan backend lokal. Frontend dapat anda akses pada [http://compress.bayusamudra.my.id](http://compress.bayusamudra.my.id). 
 
