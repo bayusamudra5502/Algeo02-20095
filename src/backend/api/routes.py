@@ -1,4 +1,5 @@
 from typing import Optional
+from starlette.requests import Request
 from starlette.responses import Response
 from lib.converter.convert import *
 from fastapi.datastructures import UploadFile
@@ -31,6 +32,12 @@ def build_api(state):
   )
 
   app.mount("/ws", build_socket(state), "Socket")
+
+  @app.middleware("http")
+  async def add_addition_cors(req: Request, call_next):
+    response = await call_next(req)
+    response.headers["Access-Control-Allow-Private-Network"] = "true"
+    return response
 
   @app.get("/")
   async def root_path():
