@@ -9,7 +9,7 @@
 Kompresi gambar merupakan suatu tipe kompresi data yang dilakukan pada gambar digital. Salah satu algoritma yang dapat digunakan untuk kompresi gambar adalah algoritma SVD (Singular Value Decomposition). Program ini memanfaatkan SVD dalam melakukan kompresi gambar.
 
 ## Deployment
-Program ini dideploy pada [http://compress.bayusamudra.my.id](http://compress.bayusamudra.my.id)
+Program ini dideploy pada [http://compress.bayusamudra.my.id](http://compress.bayusamudra.my.id). Backend yang digunakan adalah memanfaatkan Heroku.
 
 ## Struktur Folder
 Berikut ini adalah struktur folder dari project ini:
@@ -76,3 +76,15 @@ npm i
 npm start
 ```
 5. Bukalah browser pada `http://localhost:3000`
+
+### Prosedur Kompresi
+1. Bukalah [http://compress.bayusamudra.my.id](http://compress.bayusamudra.my.id) pada browser.
+2. Koneksikan backend dengan menekan icon colokan.
+3. Masukanlah data server. Anda dapat menggunakan server lokal  dan juga server yang telah disediakan. Sebagai catatan, jangan gunakan alamat `127.0.0.1` ataupun ` localhost`. Hal ini dapat anda capai dengan mengubah konfigurasi [file hosts](https://en.wikipedia.org/wiki/Hosts_(file)).
+4. Bila telah tersambung ke server, drop gambar pada tempat yang telah disediakan.
+5. Tunggu hingga proses selesai. 
+6. Anda dapat mengatur tingkat kompresi setelah proses dekomposisi selesai
+
+### Batasan Server
+1. Server hanya dapat menggunakan satu koneksi
+2. Bila anda ingin membatalkan proses, anda dapat melakukan restart browser. Selain itu, anda juga harus melakukan restart backend agar proses yang  akan selanjutnya dilakukan tidak terganggu dengan proses sebelumnya.
